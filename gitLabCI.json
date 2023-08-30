@@ -1,0 +1,204 @@
+{
+  "default" : {
+    "after_script" : [
+      "-echo 'i am starting text'"
+    ],
+    "artifacts" : null,
+    "before_script" : null,
+    "cache" : null,
+    "hooks" : null,
+    "image" : null,
+    "retry" : null,
+    "services" : null,
+    "tags" : null,
+    "timeout" : null
+  },
+  "stages" : [
+    "-build",
+    "-test",
+    "deploy"
+  ],
+  "workflow" : {
+    "name" : "Pipeline for branch: $CI_COMMIT_BRANCH",
+    "rules" : [
+      {
+        "if_r" : "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feature/ && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != $CI_DEFAULT_BRANCH",
+        "changes" : {
+          "paths" : "-Dockerfile",
+          "compare_to" : null
+        },
+        "exist" : null,
+        "allow_failure" : false,
+        "needs" : null,
+        "variables" : null
+      }
+    ]
+  },
+  "jobs" : [
+    {
+      "name" : "Job1",
+      "before_script" : [
+        "-echo 'Hi!'"
+      ],
+      "after_script" : null,
+      "allow_failure" : true,
+      "artifacts" : {
+        "paths" : [
+          "- binaries-",
+          ".config"
+        ],
+        "exclude" : "- binaries/**/*.o",
+        "expire_in" : "3 weeks and 2 days",
+        "expose_as" : null,
+        "name" : null,
+        "public" : true,
+        "untracked" : false,
+        "when" : null
+      },
+      "cache" : {
+        "key" : [
+          {
+            "files" : [
+              "Gemfile.lock"
+            ],
+            "prefix" : null
+          }
+        ],
+        "paths" : [
+          "binaries/*.apk"
+        ],
+        "untracked" : null,
+        "unprotect" : null,
+        "when" : null,
+        "policy" : null,
+        "fallback_keys" : null
+      },
+      "coverage" : null,
+      "dast_configuration" : [
+        "Example Co"
+      ],
+      "dependencies" : null,
+      "environment" : {
+        "name" : "production",
+        "url" : "https://prod.example.com",
+        "on_stop" : null,
+        "auto_stop_in" : null,
+        "deployment_tier" : null
+      },
+      "extends_1" : null,
+      "hooks" : {
+        "hash" : null,
+        "pre_get_source_script" : "- echo 'hello job1 pre_get_sources_script'"
+      },
+      "id_tokSens" : [
+        "password"
+      ],
+      "image" : {
+        "name" : "myImage",
+        "entrypoint" : "",
+        "pull_policy" : null
+      },
+      "inherit" : {
+        "default" : true,
+        "variables" : false
+      },
+      "interruptible" : false,
+      "needs" : {
+        "job_name" : [
+          "mac:build"
+        ],
+        "artifacts" : false,
+        "project" : "namespace/group/project-name",
+        "pipeline" : "other/project",
+        "optional" : false
+      },
+      "only" : {
+        "refs" : [
+          " - main"
+        ],
+        "kubernetes" : false,
+        "variables" : [
+          {
+            "key" : "$RELEASE",
+            "description" : null,
+            "value" : "staging",
+            "options" : null,
+            "expand" : null
+          }
+        ],
+        "changes" : [
+          "-Dockerfile"
+        ]
+      },
+      "except" : {
+        "refs" : [
+          " - branches"
+        ],
+        "kubernetes" : true,
+        "variables" : null,
+        "changes" : [
+          "-Dockerfile",
+          "- docker",
+          "/scripts"
+        ]
+      },
+      "parallel" : 4,
+      "release" : null,
+      "retry" : 1,
+      "rules" : {
+        "if_r" : "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feature/ && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != $CI_DEFAULT_BRANCH",
+        "changes" : {
+          "paths" : "-Dockerfile",
+          "compare_to" : null
+        },
+        "exist" : null,
+        "allow_failure" : false,
+        "needs" : null,
+        "variables" : null
+      },
+      "script" : [
+        "echo - 'Hello World'"
+      ],
+      "service" : [
+        {
+          "name" : "my-postgres:11.7",
+          "pull_policy" : [
+            "always",
+            "if-not-present"
+          ]
+        }
+      ],
+      "stage" : "build",
+      "tags" : null,
+      "timeout" : "60 minutes",
+      "trigger" : {
+        "path" : "my-group/my-project",
+        "include" : "path/to/child-pipeline.gitlab-ci.yml",
+        "project" : null,
+        "strategy" : null
+      },
+      "variables" : {
+        "key" : "VAR1",
+        "description" : null,
+        "value" : "22332",
+        "options" : null,
+        "expand" : null
+      },
+      "when" : null
+    }
+  ],
+  "variables" : {
+    "key" : "VAR2",
+    "description" : null,
+    "value" : "421",
+    "options" : null,
+    "expand" : null
+  },
+  "include" : {
+    "local" : "/templates/.gitlab-ci-template.yml",
+    "project" : "my-group/my-project",
+    "remote" : null,
+    "template" : "Auto-DevOps.gitlab-ci.yml",
+    "file_path" : null
+  }
+}
