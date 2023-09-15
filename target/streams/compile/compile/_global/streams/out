@@ -1,0 +1,6 @@
+[debug] Acquiring lock on file D:\Scala_project\ScalaGitlab\project\target\.sbt-compilation-infos\root-compile\.sbt-idea-lock ...
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Main.scala:10:1: expected class or object definition
+[error] def main(args: Array[String]): Unit = {
+[error] ^
+[error] one error found
+[debug] Releasing lock on file D:\Scala_project\ScalaGitlab\project\target\.sbt-compilation-infos\root-compile\.sbt-idea-lock.

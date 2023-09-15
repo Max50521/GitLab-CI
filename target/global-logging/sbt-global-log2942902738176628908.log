@@ -1,0 +1,108 @@
+[debug] > Exec(~run, None, None)
+[debug] > Exec(__runWatch console0, None, None)
+[debug] > Exec(sbtStashOnFailure, None, None)
+[debug] > Exec(__preWatch console0, None, None)
+[debug] > Exec(run, None, None)
+[debug] Evaluating tasks: Compile / run
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 27 Scala sources to D:\Scala_project\ScalaGitlab\target\scala-2.13\classes ...
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\CaseClasses.scala:45:12: Artifacts is already defined as case class Artifacts
+[error] case class Artifacts( //представляет собой настройки сохранения артефактов (результатов выполнения) задачи.
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\CaseClasses.scala:53:12: Cache is already defined as case class Cache
+[error] case class Cache(  // редставляет собой настройки кэширования результатов выполнения задачи.
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\CaseClassesNew.scala:1:12: GitLabCI is already defined as case class GitLabCI
+[error] case class GitLabCI(
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\CaseClassesNew.scala:23:12: Job is already defined as case class Job
+[error] case class Job( // представляет собой задачу пайплайна
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\CaseClassesNew.scala:61:12: Include is already defined as case class Include
+[error] case class Include( // Класс Include представляет собой файл, который будет включен в текущий YAML-файл.
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\CaseClassesNew.scala:101:12: Artifacts is already defined as case class Artifacts
+[error] case class Artifacts( //представляет собой настройки сохранения артефактов (результатов выполнения) задачи.
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\CaseClassesNew.scala:113:12: Cache is already defined as case class Cache
+[error] case class Cache(  // редставляет собой настройки кэширования результатов выполнения задачи.
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\CaseClassesNew.scala:123:12: Cache_key is already defined as case class Cache_key
+[error] case class Cache_key(
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\CaseClassesNew.scala:129:12: Environment is already defined as case class Environment
+[error] case class Environment( // Класс Environment представляет собой настройки окружения, в котором будет выполняться задача.
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\CaseClassesNew.scala:161:12: Only is already defined as case class Only
+[error] case class Only( // Класс Only представляет собой условия, при которых задача будет выполнена.
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\CaseClassesNew.scala:168:12: Except is already defined as case class Except
+[error] case class Except( // Класс Except представляет собой условия, при которых задача не будет выполнена.
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\CaseClassesNew.scala:176:12: Service is already defined as case class Service
+[error] case class Service(
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Default.scala:1:12: Default is already defined as case class Default
+[error] case class Default(
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Environment.scala:1:12: Environment is already defined as case class Environment
+[error] case class Environment( // Класс Environment представляет собой настройки окружения, в котором будет выполняться задача.
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Except.scala:1:12: Except is already defined as case class Except
+[error] case class Except( // Класс Except представляет собой условия, при которых задача не будет выполнена.
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\GitLabCI.scala:1:12: GitLabCI is already defined as case class GitLabCI
+[error] case class GitLabCI(
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Hooks.scala:1:12: Hooks is already defined as case class Hooks
+[error] case class Hooks(
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Image.scala:1:12: Image is already defined as case class Image
+[error] case class Image(
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Include.scala:1:12: Include is already defined as case class Include
+[error] case class Include( // Класс Include представляет собой файл, который будет включен в текущий YAML-файл.
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Inherit.scala:1:12: Inherit is already defined as case class Inherit
+[error] case class Inherit(
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Job.scala:1:12: Job is already defined as case class Job
+[error] case class Job( // представляет собой задачу пайплайна
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Needs.scala:1:12: Needs is already defined as case class Needs
+[error] case class Needs(
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Only.scala:1:12: Only is already defined as case class Only
+[error] case class Only( // Класс Only представляет собой условия, при которых задача будет выполнена.
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Release.scala:1:12: Release is already defined as case class Release
+[error] case class Release(
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Rules.scala:1:12: Rules is already defined as case class Rules
+[error] case class Rules(
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Rules_changes.scala:1:12: Rules_changes is already defined as case class Rules_changes
+[error] case class Rules_changes(
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Service.scala:1:12: Service is already defined as case class Service
+[error] case class Service(
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Services.scala:1:12: Services is already defined as case class Services
+[error] case class Services( //Класс Service представляет собой сервис, который может быть запущен вместе с задачами пайплайна.
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Trigger.scala:1:12: Trigger is already defined as case class Trigger
+[error] case class Trigger(
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Variables.scala:1:12: Variables is already defined as case class Variables
+[error] case class Variables( //Класс Variable представляет собой переменную, которая может использоваться внутри задачи.
+[error]            ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Workflow.scala:1:12: Workflow is already defined as case class Workflow
+[error] case class Workflow(
+[error]            ^
+[error] 31 errors found
+[error] (Compile / compileIncremental) Compilation failed
+[error] Total time: 0 s, completed 28 авг. 2023 г., 23:05:19
+[debug] > Exec(resumeFromFailure, None, None)
+[debug] > Exec(sbtPopOnFailure, None, None)
+[debug] > Exec(__postWatch console0, None, None)
+[debug] > Exec(__waitWatch console0, None, None)

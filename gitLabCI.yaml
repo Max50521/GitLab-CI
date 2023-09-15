@@ -1,0 +1,156 @@
+variables:
+    value: '421'
+    options: null
+    key: VAR2
+    expand: null
+    description: null
+include:
+    remote: null
+    project: my-group/my-project
+    local: /templates/.gitlab-ci-template.yml
+    file_path: null
+    template: Auto-DevOps.gitlab-ci.yml
+workflow:
+    name: 'Pipeline for branch: $CI_COMMIT_BRANCH'
+    rules:
+    -   changes:
+            paths: -Dockerfile
+            compare_to: null
+        if_r: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feature/ && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+            != $CI_DEFAULT_BRANCH
+        variables: null
+        allow_failure: false
+        exist: null
+        needs: null
+jobs:
+-   script:
+    - echo - 'Hello World'
+    rules:
+        exist: null
+        needs: null
+        if_r: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feature/ && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+            != $CI_DEFAULT_BRANCH
+        changes:
+            paths: -Dockerfile
+            compare_to: null
+        allow_failure: false
+        variables: null
+    environment:
+        auto_stop_in: null
+        url: https://prod.example.com
+        deployment_tier: null
+        on_stop: null
+        name: production
+    stage: build
+    except:
+        refs:
+        - ' - branches'
+        kubernetes: true
+        variables: null
+        changes:
+        - -Dockerfile
+        - '- docker'
+        - /scripts
+    interruptible: false
+    cache:
+        when: null
+        untracked: null
+        paths:
+        - binaries/*.apk
+        fallback_keys: null
+        key:
+        -   files:
+            - Gemfile.lock
+            prefix: null
+        unprotect: null
+        policy: null
+    artifacts:
+        untracked: false
+        exclude: '- binaries/**/*.o'
+        public: true
+        expose_as: null
+        name: null
+        paths:
+        - '- binaries-'
+        - .config
+        when: null
+        expire_in: 3 weeks and 2 days
+    coverage: null
+    timeout: 60 minutes
+    needs:
+        project: namespace/group/project-name
+        optional: false
+        pipeline: other/project
+        job_name:
+        - mac:build
+        artifacts: false
+    when: null
+    parallel: 4
+    id_tokSens:
+    - password
+    extends_1: null
+    dependencies: null
+    tags: null
+    trigger:
+        path: my-group/my-project
+        include: path/to/child-pipeline.gitlab-ci.yml
+        project: null
+        strategy: null
+    retry: 1
+    name: Job1
+    before_script:
+    - -echo 'Hi!'
+    release: null
+    variables:
+        description: null
+        expand: null
+        value: '22332'
+        options: null
+        key: VAR1
+    inherit:
+        default: true
+        variables: false
+    hooks:
+        hash: null
+        pre_get_source_script: '- echo ''hello job1 pre_get_sources_script'''
+    allow_failure: true
+    image:
+        name: myImage
+        entrypoint: ''
+        pull_policy: null
+    only:
+        refs:
+        - ' - main'
+        kubernetes: false
+        variables:
+        -   options: null
+            expand: null
+            key: $RELEASE
+            description: null
+            value: staging
+        changes:
+        - -Dockerfile
+    after_script: null
+    service:
+    -   name: my-postgres:11.7
+        pull_policy:
+        - always
+        - if-not-present
+    dast_configuration:
+    - Example Co
+stages:
+- -build
+- -test
+- deploy
+default:
+    tags: null
+    artifacts: null
+    cache: null
+    services: null
+    before_script: null
+    image: null
+    timeout: null
+    retry: null
+    after_script:
+    - -echo 'i am starting text'
+    hooks: null

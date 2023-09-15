@@ -1,0 +1,24 @@
+[debug] > Exec(~run, None, None)
+[debug] > Exec(__runWatch console0, None, None)
+[debug] > Exec(sbtStashOnFailure, None, None)
+[debug] > Exec(__preWatch console0, None, None)
+[debug] > Exec(run, None, None)
+[debug] Evaluating tasks: Compile / run
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 4 Scala sources to D:\Scala_project\ScalaGitlab\target\scala-2.13\classes ...
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Main.scala:55:5: not found: value author1
+[error]     author1
+[error]     ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Main.scala:62:5: not found: value author2
+[error]     author2
+[error]     ^
+[error] D:\Scala_project\ScalaGitlab\src\main\scala\Main.scala:76:11: not found: value autor1
+[error]   println(autor1.asJson)
+[error]           ^
+[error] three errors found
+[error] (Compile / compileIncremental) Compilation failed
+[error] Total time: 1 s, completed 3 авг. 2023 г., 19:05:47
+[debug] > Exec(resumeFromFailure, None, None)
+[debug] > Exec(sbtPopOnFailure, None, None)
+[debug] > Exec(__postWatch console0, None, None)
+[debug] > Exec(__waitWatch console0, None, None)
