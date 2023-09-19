@@ -3,19 +3,22 @@ import io.circe.generic.auto._
 import io.circe.generic.semiauto.deriveDecoder
 import io.circe.syntax._
 import io.circe.yaml.syntax._
+import shapeless.HList.ListCompat.::
+
 import java.io._
+import scala.::
 
 object Main extends App {
 
 
-val artifacts = Artifacts(List("- binaries-",".config"),Some("- binaries/**/*.o"),Some("3 weeks and 2 days"), None,None,Some(true), Some(false))
+var artifacts = Artifacts(List("- binaries-", ".config"), Some("- binaries/**/*.o"), Some("3 weeks and 2 days"), None, None, Some(true), Some(false))
 val trigger = Trigger(Some("my-group/my-project"), Some("path/to/child-pipeline.gitlab-ci.yml"), None, None)
 val service = Service("my-postgres:11.7", List("always", "if-not-present"))
-val except = Except(List(" - branches"), Some(true),None, Some(List("-Dockerfile","- docker", "/scripts")))
-val only = Only(List(" - main"), Some(false),Some(List(Variables("$RELEASE", None, "staging", None, None))) , Some(List("-Dockerfile")))
+val except = Except(List("- master", "- tags"), None,None, None)
+val only = Only(List(" - master"), None,None , None)
 val needs = Needs(Some(List("mac:build")), Some(false), Some("namespace/group/project-name"), Some("other/project"), Some(false))
 val inherit = Inherit(Some(true),Some(false))
-val image = Image("myImage", Some(""), None)
+val image = Image("sbtscala/scala-sbt:$SCALA_SBT_IMAGE_VERSION", Some(""), None)
 val hooks = Hooks(None, Some("- echo 'hello job1 pre_get_sources_script'"))
 val environment = Environment("production", Some("https://prod.example.com"), None, None, None)
 val cache = Cache(List(Cache_key(Some(List("Gemfile.lock")))), List("binaries/*.apk"),None,None,None,None,None)
@@ -25,10 +28,10 @@ val include = Include("/templates/.gitlab-ci-template.yml", Some("my-group/my-pr
 val workflow = Workflow("Pipeline for branch: $CI_COMMIT_BRANCH", List(Rules(Some("$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feature/ && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != $CI_DEFAULT_BRANCH"), Some(Rules_changes(Some("-Dockerfile"),None)), None, Some(false), None, None)))
 val default = Default(Some(List("-echo 'i am starting text'")))
 val services = Services("ruby:2.6", Some("db-postgres"), Some("/usr/local/bin/db-postgres"), None, "myImage", None, None, None, None)
-val job = Job("Job1", Some(List("-echo 'Hi!'")),None,Some(true),Some(artifacts),Some(cache),None,Some(List("Example Co")),None,Some(environment),None,Some(hooks),Some(List("password")),Some(image),Some(inherit),Some(false),Some(needs),Some(only),Some(except),Some(4),None,Some(1),Some(rules), List("echo - 'Hello World'"),Some(List(service)), "build",None,Some("60 minutes"),Some(trigger),Some(Variables("VAR1", None, "22332", None, None)),None)
-val gitLabCI = GitLabCI(Some(default), List("-build","-test", "deploy"), Some(workflow), List(job),Some(Variables("VAR2", None, "421", None, None)),Some(include))
+val job_1 = Job("scalafmt_branches",None,None,Some(true),None,None,None,None,None,None,None,None,None,Some(image),None,None,None,None,Some(except),None,None,None,None, List("- sbt -mem 2048 scalafmtCheckAll"),None, "compile",None,None,None,None,None)
+val job_2 = Job("scalafmt_master", None,None,Some(true),None,None,None,None,None,None,None,None,None,Some(image),None,None,None,Some(only),None,None,None,None,None, List("- sbt -mem 2048 scalafmtCheckAll"),None, "build",None,None,None,None,None)
 
-
+val gitLabCI_1 = GitLabCI(None, List("- compile","- build"), None, List(job_1,job_2),List(Variables("JAVA_VERSION", None, "17.0.5_8", None, None),Variables("SBT_VERSION", None, "1.8.2", None, None),Variables("SCALA_VERSION", None, "2.13.10", None, None),Variables("SCALA_SBT_IMAGE_VERSION", None, "eclipse-temurin-${JAVA_VERSION}_${SBT_VERSION}_${SCALA_VERSION}", None, None)),None)
 
 
 implicit val artifactsDecoder: Decoder[Artifacts] = deriveDecoder[Artifacts]
@@ -55,26 +58,67 @@ implicit val defaultDecoder: Decoder[Default] = deriveDecoder[Default]
 implicit val servicesDecoder: Decoder[Services] = deriveDecoder[Services]
 
 //----------------------------------------------------------------------------------------------------------------------
+//enum тут перечислить все типы
+/*
+def addToGitLabCI(x: Job, y: GitLabCI): GitLabCI = {
+  val updatedJobs = x :: y.jobs
+  y.copy(jobs = updatedJobs)
+}
+val y = gitLabCI_1
+val newJob = Job("publish", None,None,Some(true),None,None,None,None,None,None,None,None,None,Some(image),None,None,None,Some(only),None,None,None,None,None, List("- sbt -mem 2048 scalafmtCheckAll"),None, "build",None,None,None,None,None)
 
+val gitLabCI_2 = addToGitLabCI(newJob, y)
+*/
 
+def addElementToGitLabCI[T](x: T, gitLabCI: GitLabCI): GitLabCI = {   // функция добавляет Job или Variable
+  x match {
+    case v: Variables =>
+      val updatedVariables = v :: gitLabCI.variables
+      gitLabCI.copy(variables = updatedVariables)
 
-// создаем JSON объект
-val json = gitLabCI.asJson
+    case j: Job =>
+      val updatedJobs = j :: gitLabCI.jobs
+      gitLabCI.copy(jobs = updatedJobs)
+  }
+}
+// функция добавляет Job для app или для bib
+val LibJob =  Job("publish", None,None,Some(true),None,None,None,None,None,None,None,None,None,Some(image),None,None,None,Some(only),None,None,None,None,None, List("- sbt -mem 2048 scalafmtCheckAll"),None, "build",None,None,None,None,None)
+val AppJob =  Job("test", None,None,Some(true),None,None,None,None,None,None,None,None,None,Some(image),None,None,None,Some(only),None,None,None,None,None, List("- sbt -mem 2048 scalafmtCheckAll"),None, "build",None,None,None,None,None)
+  def ConfigСhoiceGitLabCI(x: String, gitLabCI: GitLabCI): GitLabCI = {
+  x match {
+
+    case "Lib" =>
+      val updatedJobs = LibJob :: gitLabCI.jobs
+      gitLabCI.copy(jobs = updatedJobs)
+
+    case "App" =>
+      val updatedJobs = AppJob :: gitLabCI.jobs
+      gitLabCI.copy(jobs = updatedJobs)
+
+  }
+}
+val gitLabCI_2 = ConfigСhoiceGitLabCI("Bib", gitLabCI_1)
+
+  // создаем JSON объект
+val json = gitLabCI_2.asJson
 val yaml = json.asYaml
 // записываем его в файл
+val newJob = Job("publish", None, None, Some(true), None, None, None, None, None, None, None, None, None, Some(image), None, None, None, Some(only), None, None, None, None, None, List("- sbt -mem 2048 scalafmtCheckAll"), None, "build", None, None, None, None, None)
+val newVar = Variables("JAVA_VERSION", None, "XXXXXXX", None, None)
+//val gitLabCI_2 = addElementToGitLabCI(newJob, y)
+//val gitLabCI_2 = addElementToGitLabCI(newVar, y)
 
-
-
-val pw = new PrintWriter(new File("gitLabCI.json"))
+//Запись в файл Json
+/*val pw = new PrintWriter(new File("gitLabCI.json"))
 pw.write(json.spaces2)
 pw.close()
 
-
+//Запись в файл YAML
 val pw2 = new PrintWriter(new File("gitLabCI.yaml"))
 pw2.write(yaml.spaces4)
-pw2.close()
+pw2.close()*/
 
-//println(gitLabCI.asJson);
+println(gitLabCI_2.asJson);
 //println(yaml.spaces2)
 
 }

@@ -1,0 +1,58 @@
+variables:
+  # renovate: datasource=docker depName=eclipse-temurin extractVersion=^(?<version>[\d_\.]+)-jre-alpine$ versioning=loose
+  JAVA_VERSION: 17.0.5_8
+  # renovate: datasource=github-releases depName=sbt/sbt extractVersion=^v(?<version>\S+) versioning=semver
+  SBT_VERSION: 1.8.2
+  SCALA_VERSION: 2.13.10
+  SCALA_SBT_IMAGE_VERSION: eclipse-temurin-${JAVA_VERSION}_${SBT_VERSION}_${SCALA_VERSION}
+
+image: sbtscala/scala-sbt:${SCALA_SBT_IMAGE_VERSION}
+
+stages:
+  - test
+  - deploy
+
+scalafmt_branches:
+  stage: test
+  except:
+    - master
+    - tags
+  allow_failure: true
+  script:
+    - sbt -mem 2048 scalafmtCheckAll
+
+scalafmt_master:
+  stage: deploy
+  only:
+    - master
+  allow_failure: true
+  script:
+    - sbt -mem 2048 scalafmtCheckAll
+
+test:
+  stage: test
+  except:
+    - master
+    - tags
+  script:
+    - sbt "set scalafmtOnCompile := false" testQuick mimaReportBinaryIssues
+  artifacts:
+    paths:
+      - target/
+  cache:
+    key: ${CI_COMMIT_SHA}
+    paths:
+      - target/
+
+publish:
+  stage: deploy
+  only:
+    - master
+    - tags
+  script:
+    - cp $TYLIP_PUBLIC_WRITE_CREDS ~/.sbt/.credentials
+    - sbt -mem 2048 "set scalafmtOnCompile := false" publish
+  cache:
+    key: ${CI_COMMIT_SHA}
+    paths:
+      - target/

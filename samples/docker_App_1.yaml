@@ -1,0 +1,54 @@
+variables:
+  # renovate: datasource=docker depName=eclipse-temurin extractVersion=^(?<version>[\d_\.]+)-jre-alpine$ versioning=loose
+  JAVA_VERSION: 17.0.5_8
+  # renovate: datasource=repology depName=freebsd/sbt versioning=loose
+  SBT_V ERSION: 1.8.2
+  SCALA_VERSION: 2.13.10
+  SCALA_SBT_IMAGE_VERSION: eclipse-temurin-${JAVA_VERSION}_${SBT_VERSION}_${SCALA_VERSION}
+
+stages:
+  - compile
+  - build
+
+scalafmt_branches:
+  image: sbtscala/scala-sbt:$SCALA_SBT_IMAGE_VERSION
+  stage: compile
+  except:
+    - master
+    - tags
+  allow_failure: true
+  script:
+    - sbt -mem 2048 scalafmtCheckAll
+
+scalafmt_master:
+  image: sbtscala/scala-sbt:$SCALA_SBT_IMAGE_VERSION
+  stage: build
+  only:
+    - master
+  allow_failure: true
+  script:
+    - sbt -mem 2048 scalafmtCheckAll
+
+compile_app:
+  image: sbtscala/scala-sbt:$SCALA_SBT_IMAGE_VERSION
+  stage: compile
+  script:
+    - sbt -mem 2048 testQuick Docker/stage
+  artifacts:
+    paths:
+      - target/docker/stage
+
+build_app:
+  image: docker:24.0.6
+  stage: build
+  services:
+    - docker:dind
+  except:
+    - schedules
+  script:
+    - cd target/docker/stage
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE/gitlab-pubs-downloader:latest || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE/gitlab-pubs-downloader:latest --tag $CI_REGISTRY_IMAGE/gitlab-pubs-downloader:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE/gitlab-pubs-downloader:latest .
+    - docker push $CI_REGISTRY_IMAGE/gitlab-pubs-downloader:$CI_COMMIT_SHA
+    - docker push $CI_REGISTRY_IMAGE/gitlab-pubs-downloader:latest

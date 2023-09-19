@@ -1,0 +1,79 @@
+include:
+  - project: 'psttf/gitlab-ci-common'
+    ref: v0.1.0
+    file: '/gitlab-ci-common.yml'
+
+image: docker:24.0.6
+
+variables:
+  # renovate: datasource=docker depName=eclipse-temurin extractVersion=^(?<version>[\d_\.]+)-jre-alpine$ versioning=loose
+  JAVA_VERSION: 17.0.5_8
+  # renovate: datasource=repology depName=freebsd/sbt versioning=loose
+  SBT_VERSION: 1.8.2
+  SCALA_VERSION: 2.13.10
+  SCALA_SBT_IMAGE_VERSION: eclipse-temurin-${JAVA_VERSION}_${SBT_VERSION}_${SCALA_VERSION}
+
+stages:
+  - compile
+  - build
+  - deploy
+
+scalafmt_branches:
+  image: sbtscala/scala-sbt:$SCALA_SBT_IMAGE_VERSION
+  stage: compile
+  except:
+    - master
+    - tags
+  allow_failure: true
+  script:
+    - sbt -mem 2048 scalafmtCheckAll
+
+scalafmt_master:
+  image: sbtscala/scala-sbt:$SCALA_SBT_IMAGE_VERSION
+  stage: build
+  only:
+    - master
+  allow_failure: true
+  script:
+    - sbt -mem 2048 scalafmtCheckAll
+
+compile:
+  image: sbtscala/scala-sbt:$SCALA_SBT_IMAGE_VERSION
+  stage: compile
+  script:
+    - sbt -mem 2048 testQuick Docker/stage
+  artifacts:
+    paths:
+      - target/docker/stage
+
+.build_common:
+  stage: build
+  services:
+    - docker:dind
+  script:
+    - cd target/docker/stage
+    - cat $REGISTRY_PASSWORD | docker login -u json_key --password-stdin $REGISTRY
+    - docker build --cache-from $REGISTRY/psttf-bot:latest
+      --tag $REGISTRY/psttf-bot:$CI_COMMIT_SHA
+      --tag $REGISTRY/psttf-bot:latest .
+    - docker push $REGISTRY/psttf-bot:$CI_COMMIT_SHA
+    - docker push $REGISTRY/psttf-bot:latest
+
+build_stage:
+  extends: .build_common
+  variables:
+    ENVIRONMENT_ID: stage
+    REGISTRY: cr.yandex/crpp5506p5n1cs852p8k
+    # file variable bug workaround, see https://gitlab.com/gitlab-org/gitlab/-/issues/29407#note_317221215
+    REGISTRY_PASSWORD: $CI_PROJECT_DIR/../$CI_PROJECT_NAME.tmp/REGISTRY_PASSWORD_STAGE
+
+build_prod:
+  extends: .build_common
+  variables:
+    ENVIRONMENT_ID: prod
+    REGISTRY: cr.yandex/crp1he291bc6tck4gbng
+    # file variable bug workaround, see https://gitlab.com/gitlab-org/gitlab/-/issues/29407#note_317221215
+    REGISTRY_PASSWORD: $CI_PROJECT_DIR/../$CI_PROJECT_NAME.tmp/REGISTRY_PASSWORD_PROD
+  only:
+    - master
+    - tags
