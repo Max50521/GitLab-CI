@@ -1,156 +1,149 @@
 variables:
-    value: '421'
+-   value: 17.0.5_8
     options: null
-    key: VAR2
     expand: null
     description: null
-include:
-    remote: null
-    project: my-group/my-project
-    local: /templates/.gitlab-ci-template.yml
-    file_path: null
-    template: Auto-DevOps.gitlab-ci.yml
-workflow:
-    name: 'Pipeline for branch: $CI_COMMIT_BRANCH'
-    rules:
-    -   changes:
-            paths: -Dockerfile
-            compare_to: null
-        if_r: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feature/ && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
-            != $CI_DEFAULT_BRANCH
-        variables: null
-        allow_failure: false
-        exist: null
-        needs: null
+    key: JAVA_VERSION
+-   options: null
+    description: null
+    key: SBT_VERSION
+    value: 1.8.2
+    expand: null
+-   expand: null
+    options: null
+    value: 2.13.10
+    description: null
+    key: SCALA_VERSION
+-   description: null
+    expand: null
+    options: null
+    value: eclipse-temurin-${JAVA_VERSION}_${SBT_VERSION}_${SCALA_VERSION}
+    key: SCALA_SBT_IMAGE_VERSION
+default: null
+include: null
+workflow: null
 jobs:
--   script:
-    - echo - 'Hello World'
-    rules:
-        exist: null
-        needs: null
-        if_r: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feature/ && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
-            != $CI_DEFAULT_BRANCH
-        changes:
-            paths: -Dockerfile
-            compare_to: null
-        allow_failure: false
-        variables: null
-    environment:
-        auto_stop_in: null
-        url: https://prod.example.com
-        deployment_tier: null
-        on_stop: null
-        name: production
-    stage: build
-    except:
-        refs:
-        - ' - branches'
-        kubernetes: true
-        variables: null
-        changes:
-        - -Dockerfile
-        - '- docker'
-        - /scripts
-    interruptible: false
-    cache:
-        when: null
-        untracked: null
-        paths:
-        - binaries/*.apk
-        fallback_keys: null
-        key:
-        -   files:
-            - Gemfile.lock
-            prefix: null
-        unprotect: null
-        policy: null
-    artifacts:
-        untracked: false
-        exclude: '- binaries/**/*.o'
-        public: true
-        expose_as: null
-        name: null
-        paths:
-        - '- binaries-'
-        - .config
-        when: null
-        expire_in: 3 weeks and 2 days
-    coverage: null
-    timeout: 60 minutes
-    needs:
-        project: namespace/group/project-name
-        optional: false
-        pipeline: other/project
-        job_name:
-        - mac:build
-        artifacts: false
-    when: null
-    parallel: 4
-    id_tokSens:
-    - password
-    extends_1: null
-    dependencies: null
-    tags: null
-    trigger:
-        path: my-group/my-project
-        include: path/to/child-pipeline.gitlab-ci.yml
-        project: null
-        strategy: null
-    retry: 1
-    name: Job1
-    before_script:
-    - -echo 'Hi!'
-    release: null
-    variables:
-        description: null
-        expand: null
-        value: '22332'
-        options: null
-        key: VAR1
-    inherit:
-        default: true
-        variables: false
-    hooks:
-        hash: null
-        pre_get_source_script: '- echo ''hello job1 pre_get_sources_script'''
-    allow_failure: true
-    image:
-        name: myImage
-        entrypoint: ''
-        pull_policy: null
+-   name: publish
+    service: null
+    before_script: null
+    id_tokSens: null
     only:
         refs:
-        - ' - main'
-        kubernetes: false
-        variables:
-        -   options: null
-            expand: null
-            key: $RELEASE
-            description: null
-            value: staging
-        changes:
-        - -Dockerfile
-    after_script: null
-    service:
-    -   name: my-postgres:11.7
-        pull_policy:
-        - always
-        - if-not-present
-    dast_configuration:
-    - Example Co
-stages:
-- -build
-- -test
-- deploy
-default:
-    tags: null
+        - ' - master'
+        kubernetes: null
+        variables: null
+        changes: null
     artifacts: null
-    cache: null
-    services: null
-    before_script: null
-    image: null
-    timeout: null
-    retry: null
-    after_script:
-    - -echo 'i am starting text'
+    rules: null
     hooks: null
+    retry: null
+    stage: build
+    trigger: null
+    when: null
+    needs: null
+    dependencies: null
+    dast_configuration: null
+    variables: null
+    extends_1: null
+    timeout: null
+    release: null
+    coverage: null
+    except: null
+    cache: null
+    image:
+        name: sbtscala/scala-sbt:$SCALA_SBT_IMAGE_VERSION
+        entrypoint: ''
+        pull_policy: null
+    tags: null
+    interruptible: null
+    allow_failure: true
+    parallel: null
+    inherit: null
+    script:
+    - '- sbt -mem 2048 scalafmtCheckAll'
+    after_script: null
+    environment: null
+-   cache: null
+    service: null
+    before_script: null
+    dast_configuration: null
+    trigger: null
+    script:
+    - '- sbt -mem 2048 scalafmtCheckAll'
+    needs: null
+    name: scalafmt_branches
+    dependencies: null
+    id_tokSens: null
+    parallel: null
+    hooks: null
+    release: null
+    inherit: null
+    after_script: null
+    timeout: null
+    only: null
+    rules: null
+    allow_failure: true
+    image:
+        name: sbtscala/scala-sbt:$SCALA_SBT_IMAGE_VERSION
+        entrypoint: ''
+        pull_policy: null
+    tags: null
+    except:
+        refs:
+        - '- master'
+        - '- tags'
+        kubernetes: null
+        variables: null
+        changes: null
+    variables: null
+    stage: compile
+    interruptible: null
+    environment: null
+    coverage: null
+    retry: null
+    when: null
+    extends_1: null
+    artifacts: null
+-   parallel: null
+    when: null
+    id_tokSens: null
+    timeout: null
+    variables: null
+    rules: null
+    script:
+    - '- sbt -mem 2048 scalafmtCheckAll'
+    retry: null
+    service: null
+    extends_1: null
+    interruptible: null
+    image:
+        name: sbtscala/scala-sbt:$SCALA_SBT_IMAGE_VERSION
+        entrypoint: ''
+        pull_policy: null
+    hooks: null
+    after_script: null
+    coverage: null
+    release: null
+    tags: null
+    name: scalafmt_master
+    allow_failure: true
+    before_script: null
+    dependencies: null
+    trigger: null
+    artifacts: null
+    stage: build
+    except: null
+    needs: null
+    only:
+        refs:
+        - ' - master'
+        kubernetes: null
+        variables: null
+        changes: null
+    inherit: null
+    dast_configuration: null
+    environment: null
+    cache: null
+stages:
+- '- compile'
+- '- build'

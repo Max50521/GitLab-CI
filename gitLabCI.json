@@ -1,204 +1,180 @@
 {
-  "default" : {
-    "after_script" : [
-      "-echo 'i am starting text'"
-    ],
-    "artifacts" : null,
-    "before_script" : null,
-    "cache" : null,
-    "hooks" : null,
-    "image" : null,
-    "retry" : null,
-    "services" : null,
-    "tags" : null,
-    "timeout" : null
-  },
+  "default" : null,
   "stages" : [
-    "-build",
-    "-test",
-    "deploy"
+    "- compile",
+    "- build"
   ],
-  "workflow" : {
-    "name" : "Pipeline for branch: $CI_COMMIT_BRANCH",
-    "rules" : [
-      {
-        "if_r" : "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feature/ && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != $CI_DEFAULT_BRANCH",
-        "changes" : {
-          "paths" : "-Dockerfile",
-          "compare_to" : null
-        },
-        "exist" : null,
-        "allow_failure" : false,
-        "needs" : null,
-        "variables" : null
-      }
-    ]
-  },
+  "workflow" : null,
   "jobs" : [
     {
-      "name" : "Job1",
-      "before_script" : [
-        "-echo 'Hi!'"
-      ],
+      "name" : "publish",
+      "before_script" : null,
       "after_script" : null,
       "allow_failure" : true,
-      "artifacts" : {
-        "paths" : [
-          "- binaries-",
-          ".config"
-        ],
-        "exclude" : "- binaries/**/*.o",
-        "expire_in" : "3 weeks and 2 days",
-        "expose_as" : null,
-        "name" : null,
-        "public" : true,
-        "untracked" : false,
-        "when" : null
-      },
-      "cache" : {
-        "key" : [
-          {
-            "files" : [
-              "Gemfile.lock"
-            ],
-            "prefix" : null
-          }
-        ],
-        "paths" : [
-          "binaries/*.apk"
-        ],
-        "untracked" : null,
-        "unprotect" : null,
-        "when" : null,
-        "policy" : null,
-        "fallback_keys" : null
-      },
+      "artifacts" : null,
+      "cache" : null,
       "coverage" : null,
-      "dast_configuration" : [
-        "Example Co"
-      ],
+      "dast_configuration" : null,
       "dependencies" : null,
-      "environment" : {
-        "name" : "production",
-        "url" : "https://prod.example.com",
-        "on_stop" : null,
-        "auto_stop_in" : null,
-        "deployment_tier" : null
-      },
+      "environment" : null,
       "extends_1" : null,
-      "hooks" : {
-        "hash" : null,
-        "pre_get_source_script" : "- echo 'hello job1 pre_get_sources_script'"
-      },
-      "id_tokSens" : [
-        "password"
-      ],
+      "hooks" : null,
+      "id_tokSens" : null,
       "image" : {
-        "name" : "myImage",
+        "name" : "sbtscala/scala-sbt:$SCALA_SBT_IMAGE_VERSION",
         "entrypoint" : "",
         "pull_policy" : null
       },
-      "inherit" : {
-        "default" : true,
-        "variables" : false
-      },
-      "interruptible" : false,
-      "needs" : {
-        "job_name" : [
-          "mac:build"
-        ],
-        "artifacts" : false,
-        "project" : "namespace/group/project-name",
-        "pipeline" : "other/project",
-        "optional" : false
-      },
+      "inherit" : null,
+      "interruptible" : null,
+      "needs" : null,
       "only" : {
         "refs" : [
-          " - main"
+          " - master"
         ],
-        "kubernetes" : false,
-        "variables" : [
-          {
-            "key" : "$RELEASE",
-            "description" : null,
-            "value" : "staging",
-            "options" : null,
-            "expand" : null
-          }
-        ],
-        "changes" : [
-          "-Dockerfile"
-        ]
-      },
-      "except" : {
-        "refs" : [
-          " - branches"
-        ],
-        "kubernetes" : true,
+        "kubernetes" : null,
         "variables" : null,
-        "changes" : [
-          "-Dockerfile",
-          "- docker",
-          "/scripts"
-        ]
+        "changes" : null
       },
-      "parallel" : 4,
+      "except" : null,
+      "parallel" : null,
       "release" : null,
-      "retry" : 1,
-      "rules" : {
-        "if_r" : "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feature/ && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != $CI_DEFAULT_BRANCH",
-        "changes" : {
-          "paths" : "-Dockerfile",
-          "compare_to" : null
-        },
-        "exist" : null,
-        "allow_failure" : false,
-        "needs" : null,
-        "variables" : null
-      },
+      "retry" : null,
+      "rules" : null,
       "script" : [
-        "echo - 'Hello World'"
+        "- sbt -mem 2048 scalafmtCheckAll"
       ],
-      "service" : [
-        {
-          "name" : "my-postgres:11.7",
-          "pull_policy" : [
-            "always",
-            "if-not-present"
-          ]
-        }
-      ],
+      "service" : null,
       "stage" : "build",
       "tags" : null,
-      "timeout" : "60 minutes",
-      "trigger" : {
-        "path" : "my-group/my-project",
-        "include" : "path/to/child-pipeline.gitlab-ci.yml",
-        "project" : null,
-        "strategy" : null
+      "timeout" : null,
+      "trigger" : null,
+      "variables" : null,
+      "when" : null
+    },
+    {
+      "name" : "scalafmt_branches",
+      "before_script" : null,
+      "after_script" : null,
+      "allow_failure" : true,
+      "artifacts" : null,
+      "cache" : null,
+      "coverage" : null,
+      "dast_configuration" : null,
+      "dependencies" : null,
+      "environment" : null,
+      "extends_1" : null,
+      "hooks" : null,
+      "id_tokSens" : null,
+      "image" : {
+        "name" : "sbtscala/scala-sbt:$SCALA_SBT_IMAGE_VERSION",
+        "entrypoint" : "",
+        "pull_policy" : null
       },
-      "variables" : {
-        "key" : "VAR1",
-        "description" : null,
-        "value" : "22332",
-        "options" : null,
-        "expand" : null
+      "inherit" : null,
+      "interruptible" : null,
+      "needs" : null,
+      "only" : null,
+      "except" : {
+        "refs" : [
+          "- master",
+          "- tags"
+        ],
+        "kubernetes" : null,
+        "variables" : null,
+        "changes" : null
       },
+      "parallel" : null,
+      "release" : null,
+      "retry" : null,
+      "rules" : null,
+      "script" : [
+        "- sbt -mem 2048 scalafmtCheckAll"
+      ],
+      "service" : null,
+      "stage" : "compile",
+      "tags" : null,
+      "timeout" : null,
+      "trigger" : null,
+      "variables" : null,
+      "when" : null
+    },
+    {
+      "name" : "scalafmt_master",
+      "before_script" : null,
+      "after_script" : null,
+      "allow_failure" : true,
+      "artifacts" : null,
+      "cache" : null,
+      "coverage" : null,
+      "dast_configuration" : null,
+      "dependencies" : null,
+      "environment" : null,
+      "extends_1" : null,
+      "hooks" : null,
+      "id_tokSens" : null,
+      "image" : {
+        "name" : "sbtscala/scala-sbt:$SCALA_SBT_IMAGE_VERSION",
+        "entrypoint" : "",
+        "pull_policy" : null
+      },
+      "inherit" : null,
+      "interruptible" : null,
+      "needs" : null,
+      "only" : {
+        "refs" : [
+          " - master"
+        ],
+        "kubernetes" : null,
+        "variables" : null,
+        "changes" : null
+      },
+      "except" : null,
+      "parallel" : null,
+      "release" : null,
+      "retry" : null,
+      "rules" : null,
+      "script" : [
+        "- sbt -mem 2048 scalafmtCheckAll"
+      ],
+      "service" : null,
+      "stage" : "build",
+      "tags" : null,
+      "timeout" : null,
+      "trigger" : null,
+      "variables" : null,
       "when" : null
     }
   ],
-  "variables" : {
-    "key" : "VAR2",
-    "description" : null,
-    "value" : "421",
-    "options" : null,
-    "expand" : null
-  },
-  "include" : {
-    "local" : "/templates/.gitlab-ci-template.yml",
-    "project" : "my-group/my-project",
-    "remote" : null,
-    "template" : "Auto-DevOps.gitlab-ci.yml",
-    "file_path" : null
-  }
+  "variables" : [
+    {
+      "key" : "JAVA_VERSION",
+      "description" : null,
+      "value" : "17.0.5_8",
+      "options" : null,
+      "expand" : null
+    },
+    {
+      "key" : "SBT_VERSION",
+      "description" : null,
+      "value" : "1.8.2",
+      "options" : null,
+      "expand" : null
+    },
+    {
+      "key" : "SCALA_VERSION",
+      "description" : null,
+      "value" : "2.13.10",
+      "options" : null,
+      "expand" : null
+    },
+    {
+      "key" : "SCALA_SBT_IMAGE_VERSION",
+      "description" : null,
+      "value" : "eclipse-temurin-${JAVA_VERSION}_${SBT_VERSION}_${SCALA_VERSION}",
+      "options" : null,
+      "expand" : null
+    }
+  ],
+  "include" : null
 }

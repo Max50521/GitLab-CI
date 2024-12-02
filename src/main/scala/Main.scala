@@ -97,26 +97,26 @@ val AppJob =  Job("test", None,None,Some(true),None,None,None,None,None,None,Non
 
   }
 }
-val gitLabCI_2 = ConfigСhoiceGitLabCI("Bib", gitLabCI_1)
+val gitLabCI_2 = ConfigСhoiceGitLabCI("Lib", gitLabCI_1)
 
   // создаем JSON объект
 val json = gitLabCI_2.asJson
 val yaml = json.asYaml
 // записываем его в файл
 val newJob = Job("publish", None, None, Some(true), None, None, None, None, None, None, None, None, None, Some(image), None, None, None, Some(only), None, None, None, None, None, List("- sbt -mem 2048 scalafmtCheckAll"), None, "build", None, None, None, None, None)
-val newVar = Variables("JAVA_VERSION", None, "XXXXXXX", None, None)
+val newVar = Variables("JAVA_VERSION", None, "10.3.4", None, None)
 //val gitLabCI_2 = addElementToGitLabCI(newJob, y)
-//val gitLabCI_2 = addElementToGitLabCI(newVar, y)
+//val gitLabCI_2 = addElementToGitLabCI(newVar, gitLabCI_1)
 
 //Запись в файл Json
-/*val pw = new PrintWriter(new File("gitLabCI.json"))
+val pw = new PrintWriter(new File("gitLabCI.json"))
 pw.write(json.spaces2)
 pw.close()
 
 //Запись в файл YAML
 val pw2 = new PrintWriter(new File("gitLabCI.yaml"))
 pw2.write(yaml.spaces4)
-pw2.close()*/
+pw2.close()
 
 println(gitLabCI_2.asJson);
 //println(yaml.spaces2)
